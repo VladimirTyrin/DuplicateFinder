@@ -73,6 +73,18 @@ namespace DuplicateFinder.Helpers
             await writer.WriteLineAsync();
             await writer.WriteLineAsync("#### Skipped ");
             await writer.WriteLineAsync();
+
+            if (result.SkippedPaths != null && result.SkippedPaths.Any())
+            {
+                foreach (var skippedPath in result.SkippedPaths)
+                {
+                    await writer.WriteLineAsync(skippedPath);
+                }
+            }
+            else
+            {
+                await writer.WriteLineAsync("No paths skipped");
+            }
         }
     }
 }
