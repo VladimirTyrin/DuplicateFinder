@@ -101,8 +101,11 @@ namespace DuplicateFinder.Managers
         private static bool ShouldSkip(DirectoryInfo directory)
         {
             var path = directory.FullName;
-            if (path.StartsWith(@"C:\Windows", StringComparison.OrdinalIgnoreCase))
-                return true;
+            foreach (var skippedPath in SkippedPaths)
+            {
+                if (path.StartsWith(skippedPath, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
 
             return false;
         }
@@ -130,5 +133,12 @@ namespace DuplicateFinder.Managers
 
             return new DirectoryInfo[0];
         }
+
+        private static readonly string[] SkippedPaths = 
+        {
+            @"C:\Windows",
+            @"C:\Program Files",
+            @"C:\Program Files (x86)",
+        };
     }
 }
