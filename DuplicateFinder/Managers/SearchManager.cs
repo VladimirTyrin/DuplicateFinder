@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -17,6 +19,12 @@ namespace DuplicateFinder.Managers
         private static int _directoriesProcessed;
         private static int _filesProcessed;
         private static int _queued;
+        private static readonly ConcurrentDictionary<(long Size, string extension), List<string>> Files
+            = new ConcurrentDictionary<(long Size, string extension), List<string>>();
+        private static readonly ConcurrentDictionary<(long Size, string extension), object> Locks
+            = new ConcurrentDictionary<(long Size, string extension), object>();
+
+        private static string[] _extensionsToUse;
 
         public static async Task<SearchResult> SearchForDuplicatesAsync(IProgressHandler progressHandler)
         {
@@ -37,6 +45,8 @@ namespace DuplicateFinder.Managers
                 await _searchBlock.Completion;
                 Logger.LogEntry("SEARCH", LogLevel.Info, "Search completed");
                 await progressHandler.ReportStateAsync("Scan completed");
+
+                FillResultFileDuplicates(result);
 
                 return result;
             }
@@ -70,6 +80,10 @@ namespace DuplicateFinder.Managers
                 CancellationToken = _cts.Token
             });
             _directoriesProcessed = 0;
+            Files.Clear();
+            Locks.Clear();
+            _extensionsToUse = SearchSettings.Instance.ExtensionsToUse?.Split(',')
+                .Select(e => "." + e.Trim().ToUpperInvariant()).ToArray();
         }
 
         private static async Task ProcessDirectoryAsync((DirectoryInfo directory, IProgressHandler progressHandler, SearchResult result) arg)
@@ -85,6 +99,12 @@ namespace DuplicateFinder.Managers
 
             try
             {
+                foreach (var file in arg.directory.EnumerateFiles())
+                {
+                    AddFile(file);
+                    Interlocked.Increment(ref _filesProcessed);
+                }
+
                 foreach (var subDirectory in arg.directory.GetDirectories())
                 {
                     Interlocked.Increment(ref _queued);
@@ -106,6 +126,46 @@ namespace DuplicateFinder.Managers
             {
                 Logger.LogException("SEARCH", LogLevel.Warning, exception);
                 arg.result.SkippedPaths.Add(path);
+            }
+        }
+
+        private static void AddFile(FileInfo fileInfo)
+        {
+            var extension = GetExtension(fileInfo);
+            if (ShouldSkipByExtensions(extension))
+                return;
+            var key = (fileInfo.Length, extension);
+            var path = fileInfo.FullName;
+
+            var currentLock = Locks.GetOrAdd(key, _ => new object());
+            
+            Files.AddOrUpdate(key, tuple => new List<string> {path}, (tuple, list) =>
+            {
+                lock (currentLock)
+                {
+                    list.Add(path);
+                    return list;
+                }
+            });
+        }
+
+        private static bool ShouldSkipByExtensions(string extension)
+        {
+            return _extensionsToUse != null
+                   && _extensionsToUse.Length != 0
+                   && !_extensionsToUse.Contains(extension);
+        }
+
+        private static void FillResultFileDuplicates(SearchResult result)
+        {
+            var duplicatePairs = Files.Where(kv => kv.Value.Count > 1);
+            foreach (var pair in duplicatePairs)
+            {
+                result.FileDuplicates.Add(new FileDuplicateEntry
+                {
+                    Size = pair.Key.Size,
+                    Paths = pair.Value
+                });
             }
         }
 
@@ -150,6 +210,13 @@ namespace DuplicateFinder.Managers
             }
 
             return new DirectoryInfo[0];
+        }
+
+        private static string GetExtension(FileInfo fileInfo)
+        {
+            return SearchSettings.Instance.IgnoreExtensions
+                ? "U"
+                : fileInfo.Extension.ToUpperInvariant();
         }
 
         private static readonly string[] SkippedPrefixes = 

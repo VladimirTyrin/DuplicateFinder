@@ -29,5 +29,19 @@
                 OnPropertyChanged();
             }
         }
+
+        public string ExtensionsToUse
+        {
+            get => Settings.SearchSettings.Instance.ExtensionsToUse;
+            set
+            {
+                var current = Settings.SearchSettings.Instance.ExtensionsToUse;
+                if (current == value)
+                    return;
+
+                Settings.SearchSettings.Instance.ExtensionsToUse = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

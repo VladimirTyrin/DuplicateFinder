@@ -58,6 +58,7 @@ namespace DuplicateFinder.Helpers
                 foreach (var fileDuplicate in result.FileDuplicates)
                 {
                     await writer.WriteLineAsync();
+                    await writer.WriteLineAsync($"{fileDuplicate.Size} bytes");
                     foreach (var path in fileDuplicate.Paths)
                     {
                         await writer.WriteLineAsync(path);
