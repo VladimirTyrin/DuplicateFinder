@@ -10,7 +10,6 @@ using System.Threading.Tasks.Dataflow;
 using DuplicateFinder.Search;
 using DuplicateFinder.Settings;
 using ITCC.Logging.Core;
-using Timer = System.Timers.Timer;
 
 namespace DuplicateFinder.Managers
 {

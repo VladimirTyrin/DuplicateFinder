@@ -5,6 +5,7 @@ namespace DuplicateFinder.UI.Windows
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class SettingsWindow : Window
     {
         public SettingsWindow()
