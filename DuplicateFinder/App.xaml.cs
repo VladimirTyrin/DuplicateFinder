@@ -1,10 +1,12 @@
 ﻿#define AUTO_LOG_WINDOW
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using DuplicateFinder.Managers;
+using DuplicateFinder.UI.Windows;
 using ITCC.Logging.Core;
 using ITCC.WPF.Windows;
 
@@ -16,6 +18,8 @@ namespace DuplicateFinder
     // ReSharper disable once RedundantExtendsListEntry
     public partial class App : Application
     {
+        public static Window GetMainWindow() => Current.Windows.OfType<MainWindow>().First();
+
         public static async Task RunOnUiThreadAsync(Action action) => await Current.Dispatcher.InvokeAsync(action);
 
         protected override void OnStartup(StartupEventArgs e)

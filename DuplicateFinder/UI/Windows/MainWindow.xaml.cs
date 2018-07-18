@@ -1,6 +1,7 @@
 ﻿using System.Windows;
+using DuplicateFinder.Helpers;
 
-namespace DuplicateFinder
+namespace DuplicateFinder.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,6 +11,17 @@ namespace DuplicateFinder
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void SettingsItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow();
+            UiHelper.CentredWindow(settingsWindow).ShowDialog();
+        }
+
+        private void ExitItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
