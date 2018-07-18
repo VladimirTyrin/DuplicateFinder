@@ -97,6 +97,7 @@ namespace DuplicateFinder.UI.Windows
             {
                 DirectoriesQueuedLabel.Content = $"Directories queued:    0";
                 await SetStateAsync("Done!");
+                Process.Start(path);
             }
             else
             {
