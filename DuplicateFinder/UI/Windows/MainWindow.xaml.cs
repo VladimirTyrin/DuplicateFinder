@@ -21,7 +21,7 @@ namespace DuplicateFinder.UI.Windows
 
         private void ExitItem_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Application.Current.Shutdown();
         }
     }
 }
