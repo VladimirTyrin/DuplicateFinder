@@ -1,10 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using DuplicateFinder.Helpers;
 using DuplicateFinder.Managers;
 using DuplicateFinder.Search;
+using ITCC.WPF.Windows;
 
 namespace DuplicateFinder.UI.Windows
 {
@@ -25,6 +29,12 @@ namespace DuplicateFinder.UI.Windows
             UiHelper.CentredWindow(settingsWindow).ShowDialog();
         }
 
+        private void ResultsItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var directory = GetResultsDirectory();
+            Process.Start("explorer.exe", directory);
+        }
+
         private void ExitItem_OnClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -37,12 +47,12 @@ namespace DuplicateFinder.UI.Windows
 
         public Task ReportCompletedAsync()
         {
-            return App.RunOnUiThreadAsync(() => StartButton.IsEnabled = true);
+            return App.RunOnUiThreadAsync(() => SetIsRunning(false));
         }
 
         private async void StartButton_OnClick(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = false;
+            SetIsRunning(true);
             var result = await SearchManager.SearchForDuplicatesAsync(this);
             if (result == null)
             {
@@ -64,9 +74,34 @@ namespace DuplicateFinder.UI.Windows
 
         private static string GetTargetFilePath()
         {
-            var appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DuplicateFinder");
+            var appDataDir = GetResultsDirectory();
             var fileName = Path.Combine(appDataDir, $"Result_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt");
             return fileName;
+        }
+
+        private static string GetResultsDirectory()
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DuplicateFinder");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
+        }
+
+        private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SearchManager.CancelSearch();
+        }
+
+        private void SetIsRunning(bool isRunning)
+        {
+            StartButton.IsEnabled = !isRunning;
+            CancelButton.IsEnabled = isRunning;
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Application.Current.Windows.OfType<LogWindow>().FirstOrDefault()?.Close();
         }
     }
 }

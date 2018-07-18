@@ -67,6 +67,9 @@ namespace DuplicateFinder.Helpers
             {
                 await writer.WriteLineAsync("No file duplicates");
             }
+
+            await writer.WriteLineAsync("#### Skipped ");
+            await writer.WriteLineAsync();
         }
     }
 }

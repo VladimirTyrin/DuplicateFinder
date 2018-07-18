@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DuplicateFinder.UI.Windows"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        Closing="MainWindow_OnClosing">
 
     <Window.Resources>
         <Style TargetType="Grid">
@@ -20,6 +23,7 @@
         <Menu DockPanel.Dock="Top" Margin="5">
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Settings" Click="SettingsItem_OnClick"/>
+                <MenuItem Header="_Results" Click="ResultsItem_OnClick"/>
                 <Separator />
                 <MenuItem Header="_Exit" Click="ExitItem_OnClick" />
             </MenuItem>
@@ -27,6 +31,7 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -48,9 +53,21 @@
                     Margin="5"
                     Click="StartButton_OnClick" />
 
+            <Button Name="CancelButton"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Width="Auto"
+                    Content="Cancel"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    IsEnabled="False"
+                    Margin="5"
+                    Click="CancelButton_OnClick" />
+
             <Label Name="ProgressLabel"
                    Grid.Column="0"
                    Grid.Row="1"
+                   Grid.ColumnSpan="2"
                    Width="Auto"
                    Content="Not started"></Label>
         </Grid>

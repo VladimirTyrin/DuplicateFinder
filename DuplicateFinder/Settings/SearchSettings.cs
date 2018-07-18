@@ -1,4 +1,6 @@
-﻿namespace DuplicateFinder.Settings
+﻿using System;
+
+namespace DuplicateFinder.Settings
 {
     public class SearchSettings
     {
@@ -27,6 +29,8 @@
             }
         }
 
-        public bool EntireMachine { get; set; }
+        public bool EntireMachine { get; set; } = true;
+
+        public int ThreadCount { get; set; } = Environment.ProcessorCount;
     }
 }
