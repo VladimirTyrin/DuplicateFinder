@@ -31,6 +31,6 @@ namespace DuplicateFinder.Settings
 
         public bool EntireMachine { get; set; } = true;
 
-        public int ThreadCount { get; set; } = Environment.ProcessorCount;
+        public int ThreadCount { get; set; } = 1;//Environment.ProcessorCount;
     }
 }

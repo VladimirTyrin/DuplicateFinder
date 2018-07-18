@@ -18,6 +18,8 @@ namespace DuplicateFinder.UI.Windows
     // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : Window, IProgressHandler
     {
+        private static readonly Random Random = new Random();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,14 +42,28 @@ namespace DuplicateFinder.UI.Windows
             Application.Current.Shutdown();
         }
 
-        public Task ReportCurrentAsync(string message)
+        public async Task ReportCurrentAsync(string message, int foldersQueued, int foldersProcessed, int filesProcessed)
         {
-            return App.RunOnUiThreadAsync(() => ProgressLabel.Content = message);
+            if (Random.Next() % 50 != 0)
+                return;
+
+            await SetStateAsync(message);
+            await App.RunOnUiThreadAsync(() =>
+            {
+                DirectoriesQueuedLabel.Content =    $"Directories queued:    {foldersQueued}";
+                DirectoriesProcessedLabel.Content = $"Directories processed: {foldersProcessed}";
+                FilesProcessedLabel.Content = $"Files processed:       {filesProcessed}";
+            });
         }
 
         public Task ReportCompletedAsync()
         {
             return App.RunOnUiThreadAsync(() => SetIsRunning(false));
+        }
+
+        private Task SetStateAsync(string message)
+        {
+            return App.RunOnUiThreadAsync(() => ProgressLabel.Content = message);
         }
 
         private async void StartButton_OnClick(object sender, RoutedEventArgs e)
@@ -56,18 +72,24 @@ namespace DuplicateFinder.UI.Windows
             var result = await SearchManager.SearchForDuplicatesAsync(this);
             if (result == null)
             {
-                await ReportCurrentAsync("Search failed!");
+                await SetStateAsync("Search failed!");
+                return;
+            }
+            if (result.Canceled)
+            {
+                await SetStateAsync("Search canceled");
                 return;
             }
             var path = GetTargetFilePath();
-            await ReportCurrentAsync($"Saving result to {path}");
+            await SetStateAsync($"Saving result to {path}");
             if (await SearchResultHelper.SaveResultAsync(path, result))
             {
-                await ReportCurrentAsync("Done!");
+                DirectoriesQueuedLabel.Content = $"Directories queued:    0";
+                await SetStateAsync("Done!");
             }
             else
             {
-                await ReportCurrentAsync("Failed to save result");
+                await SetStateAsync("Failed to save result");
             }
 
         }

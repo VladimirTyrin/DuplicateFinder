@@ -40,36 +40,63 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Name="StartButton"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Width="Auto"
-                    Content="Start"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Margin="5"
-                    Click="StartButton_OnClick" />
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Name="StartButton"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Width="Auto"
+                        Content="Start"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        Margin="5"
+                        Click="StartButton_OnClick" />
 
-            <Button Name="CancelButton"
-                    Grid.Column="1"
-                    Grid.Row="0"
-                    Width="Auto"
-                    Content="Cancel"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    IsEnabled="False"
-                    Margin="5"
-                    Click="CancelButton_OnClick" />
+                <Button Name="CancelButton"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Width="Auto"
+                        Content="Cancel"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        IsEnabled="False"
+                        Margin="5"
+                        Click="CancelButton_OnClick" />
+            </Grid>
 
             <Label Name="ProgressLabel"
                    Grid.Column="0"
                    Grid.Row="1"
-                   Grid.ColumnSpan="2"
                    Width="Auto"
                    Content="Not started"></Label>
+
+            <Label Name="DirectoriesQueuedLabel"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   Width="Auto"></Label>
+
+            <Label Name="DirectoriesProcessedLabel"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   Width="Auto"></Label>
+
+            <Label Name="FilesProcessedLabel"
+                   Grid.Column="0"
+                   Grid.Row="4"
+                   Width="Auto"></Label>
         </Grid>
     </DockPanel>
 </Window>
