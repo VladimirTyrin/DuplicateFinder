@@ -8,6 +8,7 @@ using System.Windows;
 using DuplicateFinder.Helpers;
 using DuplicateFinder.Managers;
 using DuplicateFinder.Search;
+using DuplicateFinder.Settings;
 using ITCC.WPF.Windows;
 
 namespace DuplicateFinder.UI.Windows
@@ -50,7 +51,7 @@ namespace DuplicateFinder.UI.Windows
 
         public async Task ReportCurrentAsync(string message, int foldersQueued, int foldersProcessed, int filesProcessed)
         {
-            if (Random.Next() % 50 != 0)
+            if (Random.Next() % SearchSettings.Instance.UpdateInterval != 0)
                 return;
 
             await SetStateAsync(message);

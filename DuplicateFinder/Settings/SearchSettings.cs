@@ -34,6 +34,8 @@ namespace DuplicateFinder.Settings
 
         public int ThreadCount { get; set; } = 1;
 
+        public int UpdateInterval { get; set; } = 50;
+
         public bool IgnoreExtensions { get; set; } = false;
 
         public string ExtensionsToUse { get; set; } = string.Join(",", new List<string>
