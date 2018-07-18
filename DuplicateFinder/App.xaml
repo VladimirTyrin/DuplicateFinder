@@ -1,9 +1,15 @@
 ﻿<Application x:Class="DuplicateFinder.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DuplicateFinder"
-             StartupUri="MainWindow.xaml">
+             StartupUri="UI/Windows/MainWindow.xaml"
+             Exit="App_OnExit"
+             DispatcherUnhandledException="App_OnDispatcherUnhandledException">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/ApplicationTheme.xaml"></ResourceDictionary>
+                <!--<ResourceDictionary Source="Themes/ItemsFilterStyle.xaml"></ResourceDictionary>-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
