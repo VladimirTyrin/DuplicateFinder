@@ -43,6 +43,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -97,6 +98,10 @@
                    Grid.Column="0"
                    Grid.Row="4"
                    Width="Auto"></Label>
+            
+            <Label Name="TimeElapseddLabel"
+                   Grid.Column="0"
+                   Grid.Row="5"></Label>
         </Grid>
     </DockPanel>
 </Window>

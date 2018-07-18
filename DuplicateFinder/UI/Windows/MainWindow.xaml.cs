@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using System.Windows.Threading;
 using DuplicateFinder.Helpers;
 using DuplicateFinder.Managers;
 using DuplicateFinder.Search;
@@ -21,6 +23,8 @@ namespace DuplicateFinder.UI.Windows
     {
         private static readonly Random Random = new Random();
         private static bool _isRunning;
+        private Timer _timer;
+        private Stopwatch _stopwatch;
 
         public MainWindow()
         {
@@ -133,6 +137,24 @@ namespace DuplicateFinder.UI.Windows
             StartButton.IsEnabled = !isRunning;
             CancelButton.IsEnabled = isRunning;
             _isRunning = isRunning;
+            if (isRunning)
+            {
+                _timer = new Timer
+                {
+                    Enabled = true,
+                    Interval = 150
+                };
+                _stopwatch = Stopwatch.StartNew();
+                _timer.Elapsed += async (sender, args) => await App.RunOnUiThreadAsync(() =>
+                {
+                    TimeElapseddLabel.Content = $"Time elapsed: {_stopwatch.Elapsed}";
+                });
+            }
+            else
+            {
+                _timer?.Stop();
+                _stopwatch?.Stop();
+            }
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)

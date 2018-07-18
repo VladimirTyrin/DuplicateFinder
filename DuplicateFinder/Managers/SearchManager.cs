@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -163,13 +164,49 @@ namespace DuplicateFinder.Managers
             var count = duplicatePairs.Length;
             for (var i = 0; i < duplicatePairs.Length; i++)
             {
+                _cts.Token.ThrowIfCancellationRequested();
                 var pair = duplicatePairs[i];
                 await progressHandler.ReportStateAsync($"Processing duplicate entry {i + 1} out of {count}");
-                result.FileDuplicates.Add(new FileDuplicateEntry
+
+                if (!SearchSettings.Instance.ExactMatch)
                 {
-                    Size = pair.Key.Size,
-                    Paths = pair.Value
-                });
+                    result.FileDuplicates.Add(new FileDuplicateEntry
+                    {
+                        Size = pair.Key.Size,
+                        Paths = pair.Value
+                    });
+                }
+                else
+                {
+                    var dict = pair.Value.ToDictionary(p => p, GetMd5);
+                    foreach (var kv in dict.GroupBy(kv => kv.Value))
+                    {
+                        result.FileDuplicates.Add(new FileDuplicateEntry
+                        {
+                            Size = pair.Key.Size,
+                            Paths = kv.Select(p => p.Key).ToList()
+                        });
+                    }
+                }
+            }
+        }
+
+        private static string GetMd5(string path)
+        {
+            try
+            {
+                using (var provider = new MD5CryptoServiceProvider())
+                {
+                    using (var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        return string.Concat(provider.ComputeHash(file).Select(b => b.ToString("X2")));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogEntry("SEARCH", LogLevel.Warning, $"Failed to check file {path}: {e.Message}");
+                return null;
             }
         }
 
