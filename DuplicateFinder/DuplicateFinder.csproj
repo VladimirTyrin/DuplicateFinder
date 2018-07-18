@@ -78,7 +78,13 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Helpers\SearchResultHelper.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
+    <Compile Include="Managers\SearchManager.cs" />
+    <Compile Include="Search\DirectoryDuplicateEntry.cs" />
+    <Compile Include="Search\FileDuplicateEntry.cs" />
+    <Compile Include="Search\IProgressHandler.cs" />
+    <Compile Include="Search\SearchResult.cs" />
     <Compile Include="UI\Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

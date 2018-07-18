@@ -11,6 +11,10 @@
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="10"></Setter>
         </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="80"></Setter>
+        </Style>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Margin="5">
@@ -20,7 +24,6 @@
                 <MenuItem Header="_Exit" Click="ExitItem_OnClick" />
             </MenuItem>
         </Menu>
-        <TextBox AcceptsReturn="True" />
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -30,8 +33,27 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
+
+            <Button Name="StartButton"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Width="Auto"
+                    Content="Start"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Margin="5"
+                    Click="StartButton_OnClick" />
+
+            <Label Name="ProgressLabel"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Width="Auto"
+                   Content="Not started"></Label>
         </Grid>
     </DockPanel>
 </Window>
+
