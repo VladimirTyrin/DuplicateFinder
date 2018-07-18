@@ -41,6 +41,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -60,17 +61,25 @@
             <TextBlock FlowDirection="LeftToRight" Text="Ignore extensions" />
         </CheckBox>
 
+        <CheckBox Name="ExactMatchCheckBox"
+                  Grid.Column="0"
+                  Grid.Row="2"
+                  FlowDirection="RightToLeft"
+                  IsChecked="{Binding ExactMatch, Mode=TwoWay}">
+            <TextBlock FlowDirection="LeftToRight" Text="Ignore extensions" />
+        </CheckBox>
+
         <Label Grid.Column="0"
-               Grid.Row="2"
+               Grid.Row="3"
                Margin="5"
                Content="Extensions to use (leave blank for all)"></Label>
 
         <TextBox Grid.Column="0"
-                 Grid.Row="3"
+                 Grid.Row="4"
                  Margin="5"
                  Text="{Binding ExtensionsToUse, Mode=TwoWay}"></TextBox>
     
-        <Grid Grid.Row="4"
+        <Grid Grid.Row="5"
               Grid.Column="0"
               Margin="5">
             <Grid.ColumnDefinitions>
@@ -109,7 +118,7 @@
 
         <Button Name="SaveAndCloseButton"
                 Grid.Column="0"
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="10"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"

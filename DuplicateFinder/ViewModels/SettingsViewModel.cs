@@ -30,6 +30,20 @@
             }
         }
 
+        public bool ExactMatch
+        {
+            get => Settings.SearchSettings.Instance.ExactMatch;
+            set
+            {
+                var current = Settings.SearchSettings.Instance.ExactMatch;
+                if (current == value)
+                    return;
+
+                Settings.SearchSettings.Instance.ExactMatch = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string ThreadCount
         {
             get => Settings.SearchSettings.Instance.ThreadCount.ToString();

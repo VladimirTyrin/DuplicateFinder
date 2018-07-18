@@ -46,7 +46,7 @@ namespace DuplicateFinder.Managers
                 Logger.LogEntry("SEARCH", LogLevel.Info, "Search completed");
                 await progressHandler.ReportStateAsync("Scan completed");
 
-                FillResultFileDuplicates(result);
+                await FillResultFileDuplicatesAsync(progressHandler, result);
 
                 return result;
             }
@@ -157,11 +157,14 @@ namespace DuplicateFinder.Managers
                    && !_extensionsToUse.Contains(extension);
         }
 
-        private static void FillResultFileDuplicates(SearchResult result)
+        private static async Task FillResultFileDuplicatesAsync(IProgressHandler progressHandler, SearchResult result)
         {
-            var duplicatePairs = Files.Where(kv => kv.Value.Count > 1);
-            foreach (var pair in duplicatePairs)
+            var duplicatePairs = Files.Where(kv => kv.Value.Count > 1).ToArray();
+            var count = duplicatePairs.Length;
+            for (var i = 0; i < duplicatePairs.Length; i++)
             {
+                var pair = duplicatePairs[i];
+                await progressHandler.ReportStateAsync($"Processing duplicate entry {i + 1} out of {count}");
                 result.FileDuplicates.Add(new FileDuplicateEntry
                 {
                     Size = pair.Key.Size,
