@@ -50,6 +50,7 @@ namespace DuplicateFinder.Helpers
                 await writer.WriteLineAsync("No directory duplicates");
             }
 
+            await writer.WriteLineAsync();
             await writer.WriteLineAsync("#### Files ");
             await writer.WriteLineAsync();
             if (result.FileDuplicates != null && result.FileDuplicates.Any())
@@ -68,6 +69,7 @@ namespace DuplicateFinder.Helpers
                 await writer.WriteLineAsync("No file duplicates");
             }
 
+            await writer.WriteLineAsync();
             await writer.WriteLineAsync("#### Skipped ");
             await writer.WriteLineAsync();
         }

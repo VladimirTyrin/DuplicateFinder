@@ -15,5 +15,19 @@
                 OnPropertyChanged();
             }
         }
+
+        public bool IgnoreExtensions
+        {
+            get => Settings.SearchSettings.Instance.IgnoreExtensions;
+            set
+            {
+                var current = Settings.SearchSettings.Instance.IgnoreExtensions;
+                if (current == value)
+                    return;
+
+                Settings.SearchSettings.Instance.IgnoreExtensions = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

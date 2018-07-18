@@ -36,6 +36,7 @@ namespace DuplicateFinder.Managers
 
                 await _searchBlock.Completion;
                 Logger.LogEntry("SEARCH", LogLevel.Info, "Search completed");
+                await progressHandler.ReportStateAsync("Scan completed");
 
                 return result;
             }

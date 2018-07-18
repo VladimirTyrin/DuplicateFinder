@@ -19,6 +19,7 @@ namespace DuplicateFinder.UI.Windows
     public partial class MainWindow : Window, IProgressHandler
     {
         private static readonly Random Random = new Random();
+        private static bool _isRunning;
 
         public MainWindow()
         {
@@ -27,6 +28,11 @@ namespace DuplicateFinder.UI.Windows
 
         private void SettingsItem_OnClick(object sender, RoutedEventArgs e)
         {
+            if (_isRunning)
+            {
+                MessageBox.Show("Search is in progress!");
+                return;
+            }
             var settingsWindow = new SettingsWindow();
             UiHelper.CentredWindow(settingsWindow).ShowDialog();
         }
@@ -54,6 +60,11 @@ namespace DuplicateFinder.UI.Windows
                 DirectoriesProcessedLabel.Content = $"Directories processed: {foldersProcessed}";
                 FilesProcessedLabel.Content = $"Files processed:       {filesProcessed}";
             });
+        }
+
+        public Task ReportStateAsync(string message)
+        {
+            return SetStateAsync(message);
         }
 
         public Task ReportCompletedAsync()
@@ -119,6 +130,7 @@ namespace DuplicateFinder.UI.Windows
         {
             StartButton.IsEnabled = !isRunning;
             CancelButton.IsEnabled = isRunning;
+            _isRunning = isRunning;
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
