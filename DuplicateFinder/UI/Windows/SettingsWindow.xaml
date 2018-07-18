@@ -32,7 +32,6 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
@@ -69,5 +68,15 @@
                  Grid.Row="3"
                  Margin="5"
                  Text="{Binding ExtensionsToUse, Mode=TwoWay}"></TextBox>
-    </Grid>
+    
+        <Button Name="SaveAndCloseButton"
+                Grid.Column="0"
+                Grid.Row="4"
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Content="Save and close"
+                IsDefault="True"
+                Click="SaveAndCloseButton_OnClick"></Button>
+        </Grid>
 </Window>

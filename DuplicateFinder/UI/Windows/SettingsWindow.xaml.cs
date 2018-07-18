@@ -11,5 +11,10 @@ namespace DuplicateFinder.UI.Windows
         {
             InitializeComponent();
         }
+
+        private void SaveAndCloseButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

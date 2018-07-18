@@ -80,6 +80,7 @@ namespace DuplicateFinder.Managers
                 CancellationToken = _cts.Token
             });
             _directoriesProcessed = 0;
+            _filesProcessed = 0;
             Files.Clear();
             Locks.Clear();
             _extensionsToUse = SearchSettings.Instance.ExtensionsToUse?.Split(',')
