@@ -55,7 +55,7 @@ namespace DuplicateFinder.Helpers
             await writer.WriteLineAsync();
             if (result.FileDuplicates != null && result.FileDuplicates.Any())
             {
-                foreach (var fileDuplicate in result.FileDuplicates)
+                foreach (var fileDuplicate in result.FileDuplicates.OrderByDescending(d => d.Size))
                 {
                     await writer.WriteLineAsync();
                     await writer.WriteLineAsync($"{fileDuplicate.Size} bytes");

@@ -84,7 +84,7 @@ namespace DuplicateFinder.Managers
             _filesProcessed = 0;
             Files.Clear();
             Locks.Clear();
-            _extensionsToUse = SearchSettings.Instance.ExtensionsToUse?.Split(',')
+            _extensionsToUse = SearchSettings.Instance.ExtensionsToUse?.Split(new []{ ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(e => "." + e.Trim().ToUpperInvariant()).ToArray();
         }
 
@@ -247,6 +247,22 @@ namespace DuplicateFinder.Managers
                     }
                 }
 
+                return result.ToArray();
+            }
+            if (!string.IsNullOrWhiteSpace(SearchSettings.Instance.Drive))
+            {
+                var drives = DriveInfo.GetDrives();
+                var result = new List<DirectoryInfo>();
+                var targetDrive = drives.First(d => d.Name == SearchSettings.Instance.Drive + ":\\");
+                try
+                {
+                    result.Add(targetDrive.RootDirectory);
+                    Logger.LogEntry("SEARCH", LogLevel.Info, $"Adding drive {targetDrive.Name}");
+                }
+                catch (Exception e)
+                {
+                    Logger.LogEntry("SEARCH", LogLevel.Warning, $"Failed to process drive {targetDrive.Name}: {e.Message}");
+                }
                 return result.ToArray();
             }
 

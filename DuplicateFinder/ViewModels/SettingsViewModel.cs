@@ -91,5 +91,19 @@
                 OnPropertyChanged();
             }
         }
+
+        public string Drive
+        {
+            get => Settings.SearchSettings.Instance.Drive;
+            set
+            {
+                var current = Settings.SearchSettings.Instance.Drive;
+                if (current == value)
+                    return;
+
+                Settings.SearchSettings.Instance.Drive = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

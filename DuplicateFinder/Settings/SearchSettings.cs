@@ -29,7 +29,7 @@ namespace DuplicateFinder.Settings
             }
         }
 
-        public bool EntireMachine { get; set; } = true;
+        public bool EntireMachine { get; set; } = false;
 
         public bool ExactMatch { get; set; } = false;
 
@@ -43,5 +43,7 @@ namespace DuplicateFinder.Settings
         {
             "mkv"
         });
+
+        public string Drive { get; set; } = "C";
     }
 }
